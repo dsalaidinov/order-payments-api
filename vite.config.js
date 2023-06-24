@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
+import path from 'path';
+import { resolve } from 'path';
 
 export default defineConfig({
     plugins: [
@@ -10,9 +12,27 @@ export default defineConfig({
         }),
         vue()
     ],
-    // build: {
-    //     outDir: './public/dist'
-    // },
+    build: {
+        outDir: 'public/build',
+        rollupOptions: {
+            input: {
+                main: resolve(__dirname, 'resources/js/app.js'),
+            },
+        },
+    },
+    resolve: {
+        alias: {
+          '@': path.resolve(__dirname, 'resources/js'),
+        },
+      },
+    
+    css: {
+        preprocessorOptions: {
+            scss: {
+            additionalData: `@import "@/styles/variables.scss";`,
+            },
+        },
+    },
     // plugins: [
     //     laravel([
     //         'resources/css/app.css',
