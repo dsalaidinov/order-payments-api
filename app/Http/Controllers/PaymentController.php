@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\PaymentGateways\PaymentGatewayInterface;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    protected $paymentGateway;
+
+    public function __construct(PaymentGatewayInterface $paymentGateway)
+    {
+        $this->paymentGateway = $paymentGateway;
+    }
+
     public function createPaymentForm(Request $request)
     {
         // Получить параметры из запроса
