@@ -14,10 +14,7 @@
       <template v-slot:selection="{ item }">
         <div class="language-switcher__selection" @click="changeLanguage(item.value)">
           <country-flag :country="item.value" size="medium" />
-        </div>        <!-- <v-list-item>
-          <v-list-item-title>
-</v-list-item-title>
-        </v-list-item> -->
+        </div>
       </template>
       <template v-slot:item="{ item }">
         <v-list-item @click="changeLanguage(item.value)">

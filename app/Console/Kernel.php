@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Services\WayforpayRecurringPaymentService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,6 +14,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        // Добавляем задачу cron job для обработки рекуррентных платежей Wayforpay
+        $schedule->call(function () {
+            $recurringPaymentService = new WayforpayRecurringPaymentService();
+            $recurringPaymentService->processRecurringPayments();
+        })->daily();
     }
 
     /**

@@ -16,7 +16,8 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <!-- Другой HTML-код вашего шаблона -->
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <script id="widget-wfp-script" language="javascript" type="text/javascript" src="https://secure.wayforpay.com/server/pay-widget.js"></script>
     </body>
 </html>

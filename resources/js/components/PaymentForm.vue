@@ -42,6 +42,7 @@
     >
       {{ $t('paymentForm.payButton') }}
     </v-btn>
+
     <div v-if="paymentSuccess" class="payment-form__alert payment-form__alert--success">
       {{ $t('paymentForm.successMessage') }}
     </div>
@@ -78,19 +79,78 @@ export default {
     },
     methods: {
         pay() {
-            // Ваша логика обработки платежа здесь
-            // Можете добавить проверки и валидацию перед отправкой запроса
-            // В данном примере просто симулируем успешный или неуспешный платеж
-            if (this.email && this.agreed) {
-                // Успешный платеж
-                this.paymentSuccess = true;
-                this.paymentError = false;
+          const wayforpay = new Wayforpay();
+
+          const handlePaymentApproved = (response) => {
+            this.paymentSuccess = true;
+            this.paymentError = false;
+          };
+
+          const handlePaymentDeclined = (response) => {
+            this.paymentSuccess = false;
+            this.paymentError = true;
+          };
+
+          const handlePaymentPending = (response) => {
+          };
+
+          const initializePaymentWidget = () => {
+            // Тестовые данные
+            const merchantAccount = 'test_merch_n1';
+            const merchantSecretKey = 'flk3409refn54t54t*FNJRET';
+
+            // Параметры платежа
+            const orderReference = 'DH783023';
+            const orderDate = '1415379863';
+            const amount = '1547.36';
+            const currency = 'RUB';
+            const productName = 'Процессор Intel Core i5-4670 3.4GHz';
+            const productPrice = '1000';
+            const productCount = '1';
+            const clientFirstName = 'Вася';
+            const clientLastName = 'Васечкин';
+            const clientEmail = 'some@mail.com';
+            const clientPhone = '380631234567';
+            const language = 'RU';
+
+            // Собираем данные для подписи
+            const data = `${merchantAccount};www.market.ua;${orderReference};${orderDate};${amount};${currency};${productName};${productPrice};${productCount};${clientFirstName};${clientLastName};${clientEmail};${clientPhone};${language}`;
+            const signature = CryptoJS.HmacMD5(data, merchantSecretKey).toString();
+            console.log('Сгенерированная подпись:', signature);
+
+            wayforpay.run(
+              {
+                merchantAccount : "test_merch_n1", 				
+                merchantDomainName : "localhost:8000", 				
+                authorizationType : "SimpleSignature", 				
+                merchantSignature : "b95932786cbe243a76b014846b63fe92", 				
+                orderReference : "DH783023", 				
+                orderDate : "1415379863", 				
+                amount : "1547.36", 				
+                currency : "UAH", 				
+                productName : "Процессор Intel Core i5-4670 3.4GHz", 				
+                productPrice : "1000", 				
+                productCount : "1", 				
+                clientFirstName : "Вася", 				
+                clientLastName : "Васечкин", 				
+                clientEmail : "some@mail.com", 				
+                clientPhone: "380631234567", 				
+                language: "RU" 			
+              },
+              handlePaymentApproved,
+              handlePaymentDeclined,
+              handlePaymentPending
+            );
+          };
+
+          if (this.email && this.agreed) {
+                initializePaymentWidget();
+                
             }
-            else {
-                // Неуспешный платеж
-                this.paymentSuccess = false;
-                this.paymentError = true;
-            }
+            
+
+        },
+        processPayment() {
         },
     },
     components: { LanguageSwitcher }
